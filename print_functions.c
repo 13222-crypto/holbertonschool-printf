@@ -1,16 +1,24 @@
 #include "main.h"
 
 /**
- * print_int - prints an integer
- * @l: va_list arguments
- * Return: number of characters printed
+ * print_int - prints integers with l and h modifiers
+ * @l: arguments
+ * @mod: modifier (l, h, or 0)
+ * Return: count
  */
-int print_int(va_list l)
+int print_int(va_list l, char mod)
 {
-	long int n = va_arg(l, int);
-	unsigned int num;
-	unsigned int div = 1;
+	long int n;
+	unsigned long int num;
+	unsigned long int div = 1;
 	int count = 0;
+
+	if (mod == 'l')
+		n = va_arg(l, long int);
+	else if (mod == 'h')
+		n = (short int)va_arg(l, int);
+	else
+		n = va_arg(l, int);
 
 	if (n < 0)
 	{
