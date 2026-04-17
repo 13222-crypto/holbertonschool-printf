@@ -1,9 +1,7 @@
 #include "main.h"
 
 /**
- * _printf - custom printf with width and modifiers
- * @format: string
- * Return: count
+ * _printf - custom printf with width support
  */
 int _printf(const char *format, ...)
 {
@@ -19,6 +17,7 @@ int _printf(const char *format, ...)
 		{
 			i++;
 			width = 0;
+			/* قراءة الـ width */
 			if (format[i] == '*') {
 				width = va_arg(args, int);
 				i++;
@@ -28,18 +27,23 @@ int _printf(const char *format, ...)
 					i++;
 				}
 			}
+			/* قراءة الـ modifier */
 			mod = 0;
 			if (format[i] == 'l' || format[i] == 'h') { mod = format[i]; i++; }
-			
+
 			if (format[i] == 'd' || format[i] == 'i') count += print_int(args, mod, width);
-			else if (format[i] == 's') count += print_str(args, width);
 			else if (format[i] == 'u') count += print_unsigned(args, mod, width);
+			else if (format[i] == 'o') count += print_octal(args, mod, width);
+			else if (format[i] == 'x') count += print_hex(args, mod, width);
+			else if (format[i] == 'X') count += print_HEX(args, mod, width);
+			else if (format[i] == 's') count += print_str(args, width);
 			else if (format[i] == 'c') {
-				int c_val = va_arg(args, int);
+				int val = va_arg(args, int);
 				while (width > 1) { count += _putchar(' '); width--; }
-				count += _putchar(c_val);
+				count += _putchar(val);
 			}
 			else if (format[i] == '%') count += _putchar('%');
+			else if (format[i] == '\0') { count += _putchar('%'); break; }
 			else {
 				count += _putchar('%');
 				if (mod) count += _putchar(mod);
