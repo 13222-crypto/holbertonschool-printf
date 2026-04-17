@@ -1,5 +1,8 @@
 #include "main.h"
 
+/**
+ * print_unsigned - prints unsigned with width
+ */
 int print_unsigned(va_list l, char mod, int width)
 {
 	unsigned long int n, temp;
@@ -24,10 +27,13 @@ int print_unsigned(va_list l, char mod, int width)
 	return (count);
 }
 
+/**
+ * print_octal - prints octal with width
+ */
 int print_octal(va_list l, char mod, int width)
 {
 	unsigned long int n, temp;
-	int a[22], i, count = 0, len = 0;
+	int a[22], i = 0, j, count = 0, len = 0;
 
 	if (mod == 'l') n = va_arg(l, unsigned long int);
 	else if (mod == 'h') n = (unsigned short int)va_arg(l, unsigned int);
@@ -39,14 +45,14 @@ int print_octal(va_list l, char mod, int width)
 	
 	while (width > len) { count += _putchar(' '); width--; }
 
-	if (temp == 0) return (count + _putchar('0'));
+	if (n == 0) return (count + _putchar('0'));
 
-	for (i = 0; n > 0; i++) {
-		a[i] = n % 8;
+	while (n > 0) {
+		a[i++] = n % 8;
 		n /= 8;
 	}
-	for (i = i - 1; i >= 0; i--)
-		count += _putchar('0' + a[i]);
+	for (j = i - 1; j >= 0; j--)
+		count += _putchar('0' + a[j]);
 
 	return (count);
 }

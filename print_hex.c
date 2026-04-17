@@ -1,9 +1,12 @@
 #include "main.h"
 
+/**
+ * handle_hex - helper for hex printing
+ */
 int handle_hex(unsigned long int n, char *hex, int width)
 {
 	char a[16];
-	int i = 0, count = 0, len = 0;
+	int i = 0, j, count = 0, len = 0;
 	unsigned long int temp = n;
 
 	if (temp == 0) len = 1;
@@ -11,14 +14,14 @@ int handle_hex(unsigned long int n, char *hex, int width)
 	
 	while (width > len) { count += _putchar(' '); width--; }
 
-	if (temp == 0) return (count + _putchar('0'));
+	if (n == 0) return (count + _putchar('0'));
 
 	while (n > 0) {
 		a[i++] = hex[n % 16];
 		n /= 16;
 	}
-	for (i = i - 1; i >= 0; i--)
-		count += _putchar(a[i]);
+	for (j = i - 1; j >= 0; j--)
+		count += _putchar(a[j]);
 
 	return (count);
 }
