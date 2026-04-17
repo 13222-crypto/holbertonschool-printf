@@ -20,13 +20,20 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			i++;
-			if (format[i] == 'c') count += _putchar(va_arg(args, int));
-			else if (format[i] == 'u') count += print_unsigned(args);
-			else if (format[i] == 'o') count += print_octal(args);
-			else if (format[i] == 'x') count += print_hex(args);
-			else if (format[i] == 'X') count += print_HEX(args);
-			else if (format[i] == 'b') count += print_binary(args);
-			else if (format[i] == '%') count += _putchar('%');
+			if (format[i] == 'c')
+				count += _putchar(va_arg(args, int));
+			else if (format[i] == 'u')
+				count += print_unsigned(args);
+			else if (format[i] == 'o')
+				count += print_octal(args);
+			else if (format[i] == 'x')
+				count += print_hex(args);
+			else if (format[i] == 'X')
+				count += print_HEX(args);
+			else if (format[i] == 'b')
+				count += print_binary(args);
+			else if (format[i] == '%')
+				count += _putchar('%');
 			else
 			{
 				count += _putchar('%');
