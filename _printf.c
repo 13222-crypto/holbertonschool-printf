@@ -22,19 +22,17 @@ int _printf(const char *format, ...)
 			if (format[i] == '\0')
 				break;
 			mod = 0;
-			/* Check for modifiers */
 			if (format[i] == 'l' || format[i] == 'h')
 			{
 				mod = format[i];
 				i++;
 			}
-			/* Final check if format ends after modifier */
 			if (format[i] == '\0')
 			{
 				count += _putchar('%');
 				break;
 			}
-			/* Handling conversion specifiers */
+			/* الشغل كله هنا: إذا لقينا حرف تحويل معروف نعالجه */
 			if (format[i] == 'd' || format[i] == 'i') count += print_int(args, mod);
 			else if (format[i] == 'u') count += print_unsigned(args, mod);
 			else if (format[i] == 'o') count += print_octal(args, mod);
@@ -46,10 +44,12 @@ int _printf(const char *format, ...)
 			else if (format[i] == '%') count += _putchar('%');
 			else
 			{
+				/* إذا ما عرفنا الحرف، نطبع الـ % ونرجع نعتبر الـ mod حرف عادي */
 				count += _putchar('%');
 				if (mod)
-					count += _putchar(mod);
-				count += _putchar(format[i]);
+					i--; /* نرجع خطوة وراء عشان نطبع الـ l أو الـ h كحرف عادي */
+				else
+					count += _putchar(format[i]);
 			}
 		}
 		else
