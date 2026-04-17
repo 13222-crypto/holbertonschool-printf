@@ -22,17 +22,19 @@ int _printf(const char *format, ...)
 			if (format[i] == '\0')
 				break;
 			mod = 0;
+			/* Check for modifiers */
 			if (format[i] == 'l' || format[i] == 'h')
 			{
 				mod = format[i];
 				i++;
 			}
-			/* Case: %h or %l followed by nothing valid */
+			/* Final check if format ends after modifier */
 			if (format[i] == '\0')
 			{
 				count += _putchar('%');
 				break;
 			}
+			/* Handling conversion specifiers */
 			if (format[i] == 'd' || format[i] == 'i') count += print_int(args, mod);
 			else if (format[i] == 'u') count += print_unsigned(args, mod);
 			else if (format[i] == 'o') count += print_octal(args, mod);
