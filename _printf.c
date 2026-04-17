@@ -25,10 +25,10 @@ int print_p(void *ptr)
 {
 	unsigned long int p = (unsigned long int)ptr;
 	int count = 0;
+	char *str = "(nil)";
 
 	if (!ptr)
 	{
-		str = "(nil)";
 		while (str[count])
 			_putchar(str[count++]);
 		return (count);
@@ -40,13 +40,36 @@ int print_p(void *ptr)
 }
 
 /**
- * _printf - produces output
+ * print_number - prints an integer
+ * @n: integer to print
+ * Return: number of characters printed
+ */
+int print_number(int n)
+{
+	unsigned int n1;
+	int count = 0;
+
+	if (n < 0)
+	{
+		count += _putchar('-');
+		n1 = -n;
+	}
+	else
+		n1 = n;
+	if (n1 / 10)
+		count += print_number(n1 / 10);
+	count += _putchar((n1 % 10) + '0');
+	return (count);
+}
+
+/**
+ * _printf - produces output according to a format
  */
 int _printf(const char *format, ...)
 {
 	va_list args;
 	int count = 0, i = 0;
-	char *str;
+	char *s;
 
 	if (!format || (format[0] == '%' && !format[1]))
 		return (-1);
@@ -60,13 +83,12 @@ int _printf(const char *format, ...)
 			if (format[i] == 'c') count += _putchar(va_arg(args, int));
 			else if (format[i] == 's')
 			{
-				str = va_arg(args, char *);
-				if (!str) str = "(null)";
-				while (str && *str) count += _putchar(*str++);
+				s = va_arg(args, char *);
+				if (!s) s = "(null)";
+				while (s && *s) count += _putchar(*s++);
 			}
 			else if (format[i] == '%') count += _putchar('%');
 			else if (format[i] == 'd' || format[i] == 'i') count += print_number(va_arg(args, int));
-			else if (format[i] == 'S') count += print_S(va_arg(args, char *));
 			else if (format[i] == 'p') count += print_p(va_arg(args, void *));
 			else
 			{
