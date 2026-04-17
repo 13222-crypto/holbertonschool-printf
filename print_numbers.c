@@ -36,14 +36,17 @@ int print_octal(va_list l, char mod, int width)
 	temp = n;
 	if (temp == 0) len = 1;
 	else while (temp > 0) { temp /= 8; len++; }
+	
 	while (width > len) { count += _putchar(' '); width--; }
 
-	for (i = 0; i < 22; i++) { a[i] = n % 8; n /= 8; }
-	for (i = 21; i >= 0; i--) {
-		if (a[i] > 0 || count > 0 || i == 0) {
-			_putchar('0' + a[i]);
-			count++;
-		}
+	if (temp == 0) return (count + _putchar('0'));
+
+	for (i = 0; n > 0; i++) {
+		a[i] = n % 8;
+		n /= 8;
 	}
+	for (i = i - 1; i >= 0; i--)
+		count += _putchar('0' + a[i]);
+
 	return (count);
 }
