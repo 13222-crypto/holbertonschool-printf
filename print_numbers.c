@@ -1,10 +1,5 @@
 #include "main.h"
 
-/**
- * print_unsigned - prints unsigned with width
- * @l: arguments @mod: modifier @width: width
- * Return: count
- */
 int print_unsigned(va_list l, char mod, int width)
 {
 	unsigned long int n, temp;
@@ -19,6 +14,7 @@ int print_unsigned(va_list l, char mod, int width)
 	if (temp == 0) len = 1;
 	else while (temp > 0) { temp /= 10; len++; }
 	while (width > len) { count += _putchar(' '); width--; }
+
 	while (n / div > 9) div *= 10;
 	while (div != 0) {
 		count += _putchar('0' + (n / div));
@@ -28,9 +24,6 @@ int print_unsigned(va_list l, char mod, int width)
 	return (count);
 }
 
-/**
- * print_octal - prints octal with width
- */
 int print_octal(va_list l, char mod, int width)
 {
 	unsigned long int n, temp;
