@@ -28,21 +28,19 @@ int print_number(int n, int plus, int space)
 	else
 		n1 = n;
 
-	if (n1 / 10)
-		count += print_number_recursion(n1 / 10);
-
-	count += _putchar((n1 % 10) + '0');
+	count += print_number_recursion(n1);
 	return (count);
 }
 
 /**
- * print_number_recursion - helper for recursion without re-printing flags
+ * print_number_recursion - helper for recursion
  * @n1: unsigned int
  * Return: count
  */
 int print_number_recursion(unsigned int n1)
 {
 	int count = 0;
+
 	if (n1 / 10)
 		count += print_number_recursion(n1 / 10);
 	count += _putchar((n1 % 10) + '0');
@@ -57,8 +55,7 @@ int print_number_recursion(unsigned int n1)
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int i = 0, count = 0;
-	int plus, space;
+	int i = 0, count = 0, plus, space;
 
 	if (!format || (format[0] == '%' && !format[1]))
 		return (-1);
@@ -71,14 +68,12 @@ int _printf(const char *format, ...)
 			plus = 0;
 			space = 0;
 			i++;
-			/* Check for flags */
 			while (format[i] == '+' || format[i] == ' ')
 			{
 				if (format[i] == '+') plus = 1;
-				if (format[i] == ' ') space = 1;
+				else if (format[i] == ' ') space = 1;
 				i++;
 			}
-			/* Handle specifiers */
 			if (format[i] == 'd' || format[i] == 'i')
 				count += print_number(va_arg(args, int), plus, space);
 			else if (format[i] == 'c')
