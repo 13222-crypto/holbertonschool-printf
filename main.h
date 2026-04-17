@@ -7,8 +7,7 @@
 
 int _putchar(char c);
 int _printf(const char *format, ...);
-int print_number(int n);
-int print_S(char *str);
-int print_p(void *ptr);
+int print_number(int n, int plus, int space);
+int print_number_recursion(unsigned int n1);
 
 #endif
