@@ -1,19 +1,56 @@
 #include "main.h"
 
 /**
- * get_n_len - gets the number of digits in an integer
+ * get_n_len - gets the number of digits/chars in an unsigned number
  */
-int get_n_len(unsigned int n)
+int get_n_len(unsigned int n, int base)
 {
 	int len = 0;
 	if (n == 0) return (1);
-	while (n > 0) { n /= 10; len++; }
+	while (n > 0) { n /= base; len++; }
 	return (len);
 }
 
 /**
- * print_number - handles %d/%i with flags and width
+ * print_base - handles u, o, x, X with flags and width
  */
+int print_base(unsigned int n, int base, int hash, int upper, int zero, int width)
+{
+	char *set = upper ? "0123456789ABCDEF" : "0123456789abcdef";
+	char buffer[50];
+	int i = 0, count = 0, len = 0;
+
+	len = get_n_len(n, base);
+	if (hash && n != 0)
+	{
+		if (base == 8) len++;
+		else if (base == 16) len += 2;
+	}
+
+	if (zero && width > len)
+		while (width > len++) count += _putchar('0');
+
+	if (n == 0) return (count + _putchar('0'));
+
+	if (hash)
+	{
+		if (base == 8) count += _putchar('0');
+		else if (base == 16)
+		{
+			count += _putchar('0');
+			count += _putchar(upper ? 'X' : 'x');
+		}
+	}
+
+	while (n > 0)
+	{
+		buffer[i++] = set[n % base];
+		n /= base;
+	}
+	while (--i >= 0) count += _putchar(buffer[i]);
+	return (count);
+}
+
 int print_number(int n, int plus, int space, int zero, int width)
 {
 	unsigned int n1;
@@ -22,7 +59,7 @@ int print_number(int n, int plus, int space, int zero, int width)
 	if (n < 0) { n1 = -n; sign = 1; }
 	else n1 = n;
 
-	len = get_n_len(n1);
+	len = get_n_len(n1, 10);
 	if (sign || plus || space) len++;
 
 	if (zero && width > len)
@@ -30,16 +67,12 @@ int print_number(int n, int plus, int space, int zero, int width)
 		if (sign) count += _putchar('-');
 		else if (plus) count += _putchar('+');
 		else if (space) count += _putchar(' ');
-		
 		while (width > len++) count += _putchar('0');
-		count += print_number_recursion(n1);
-		return (count);
+		return (count + print_number_recursion(n1));
 	}
-
 	if (sign) count += _putchar('-');
 	else if (plus) count += _putchar('+');
 	else if (space) count += _putchar(' ');
-
 	return (count + print_number_recursion(n1));
 }
 
@@ -48,23 +81,6 @@ int print_number_recursion(unsigned int n1)
 	int count = 0;
 	if (n1 / 10) count += print_number_recursion(n1 / 10);
 	return (count + _putchar((n1 % 10) + '0'));
-}
-
-int print_base(unsigned int n, int base, int hash, int upper)
-{
-	char *set = upper ? "0123456789ABCDEF" : "0123456789abcdef";
-	char buffer[50];
-	int i = 0, count = 0;
-
-	if (n == 0) return (_putchar('0'));
-	if (hash)
-	{
-		if (base == 8) count += _putchar('0');
-		else if (base == 16) { count += _putchar('0'); count += _putchar(upper ? 'X' : 'x'); }
-	}
-	while (n > 0) { buffer[i++] = set[n % base]; n /= base; }
-	while (--i >= 0) count += _putchar(buffer[i]);
-	return (count);
 }
 
 int _printf(const char *format, ...)
@@ -95,9 +111,10 @@ int _printf(const char *format, ...)
 			}
 			if (format[i] == 'd' || format[i] == 'i')
 				count += print_number(va_arg(args, int), plus, space, zero, width);
-			else if (format[i] == 'o') count += print_base(va_arg(args, unsigned int), 8, hash, 0);
-			else if (format[i] == 'x') count += print_base(va_arg(args, unsigned int), 16, hash, 0);
-			else if (format[i] == 'X') count += print_base(va_arg(args, unsigned int), 16, hash, 1);
+			else if (format[i] == 'u') count += print_base(va_arg(args, unsigned int), 10, 0, 0, zero, width);
+			else if (format[i] == 'o') count += print_base(va_arg(args, unsigned int), 8, hash, 0, zero, width);
+			else if (format[i] == 'x') count += print_base(va_arg(args, unsigned int), 16, hash, 0, zero, width);
+			else if (format[i] == 'X') count += print_base(va_arg(args, unsigned int), 16, hash, 1, zero, width);
 			else if (format[i] == 'c') count += _putchar(va_arg(args, int));
 			else if (format[i] == 's')
 			{
