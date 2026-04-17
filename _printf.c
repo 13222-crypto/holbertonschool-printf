@@ -1,70 +1,46 @@
 #include "main.h"
 
 /**
- * print_hex_custom - prints hex value for non-printable characters
- * @n: character value
- * Return: number of characters printed
+ * print_hex_p - prints hexadecimal for pointers
+ * @n: number
+ * Return: count
  */
-int print_hex_custom(unsigned char n)
+int print_hex_p(unsigned long int n)
 {
-	char *hex = "0123456789ABCDEF";
 	int count = 0;
+	char *hex = "0123456789abcdef";
 
-	count += _putchar('\\');
-	count += _putchar('x');
-	count += _putchar(hex[n / 16]);
+	if (n / 16)
+		count += print_hex_p(n / 16);
 	count += _putchar(hex[n % 16]);
 	return (count);
 }
 
 /**
- * print_S - prints the string with non-printable characters handled
- * @str: string to print
- * Return: count of characters printed
+ * print_p - prints address
+ * @ptr: pointer
+ * Return: count
  */
-int print_S(char *str)
+int print_p(void *ptr)
 {
-	int i = 0, count = 0;
-
-	if (!str)
-		str = "(null)";
-
-	while (str[i])
-	{
-		if ((str[i] > 0 && str[i] < 32) || str[i] >= 127)
-			count += print_hex_custom(str[i]);
-		else
-			count += _putchar(str[i]);
-		i++;
-	}
-	return (count);
-}
-
-/**
- * print_number - prints an integer
- * @n: integer to print
- * Return: number of characters printed
- */
-int print_number(int n)
-{
-	unsigned int n1;
+	unsigned long int p = (unsigned long int)ptr;
 	int count = 0;
 
-	if (n < 0)
+	if (!ptr)
 	{
-		count += _putchar('-');
-		n1 = -n;
+		str = "(nil)";
+		while (str[count])
+			_putchar(str[count++]);
+		return (count);
 	}
-	else
-		n1 = n;
-	if (n1 / 10)
-		count += print_number(n1 / 10);
-	count += _putchar((n1 % 10) + '0');
+	count += _putchar('0');
+	count += _putchar('x');
+	count += print_hex_p(p);
 	return (count);
 }
 
 /**
- * _printf - produces output according to a format
+ * _printf - produces output
  */
 int _printf(const char *format, ...)
 {
@@ -91,6 +67,7 @@ int _printf(const char *format, ...)
 			else if (format[i] == '%') count += _putchar('%');
 			else if (format[i] == 'd' || format[i] == 'i') count += print_number(va_arg(args, int));
 			else if (format[i] == 'S') count += print_S(va_arg(args, char *));
+			else if (format[i] == 'p') count += print_p(va_arg(args, void *));
 			else
 			{
 				count += _putchar('%');
