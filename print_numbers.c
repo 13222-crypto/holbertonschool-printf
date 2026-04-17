@@ -1,9 +1,6 @@
 #include "main.h"
 
-/**
- * print_unsigned - prints unsigned with width
- */
-int print_unsigned(va_list l, char mod, int width)
+int print_unsigned(va_list l, char mod, int width, int precision)
 {
 	unsigned long int n, temp;
 	unsigned long int div = 1;
@@ -16,7 +13,11 @@ int print_unsigned(va_list l, char mod, int width)
 	temp = n;
 	if (temp == 0) len = 1;
 	else while (temp > 0) { temp /= 10; len++; }
+	
+	if (precision > len) len = precision;
 	while (width > len) { count += _putchar(' '); width--; }
+
+	if (n == 0 && precision == 0) return (count);
 
 	while (n / div > 9) div *= 10;
 	while (div != 0) {
@@ -27,10 +28,7 @@ int print_unsigned(va_list l, char mod, int width)
 	return (count);
 }
 
-/**
- * print_octal - prints octal with width
- */
-int print_octal(va_list l, char mod, int width)
+int print_octal(va_list l, char mod, int width, int precision)
 {
 	unsigned long int n, temp;
 	int a[22], i = 0, j, count = 0, len = 0;
@@ -43,9 +41,11 @@ int print_octal(va_list l, char mod, int width)
 	if (temp == 0) len = 1;
 	else while (temp > 0) { temp /= 8; len++; }
 	
+	if (precision > len) len = precision;
 	while (width > len) { count += _putchar(' '); width--; }
 
-	if (n == 0) return (count + _putchar('0'));
+	if (n == 0 && precision != 0) return (count + _putchar('0'));
+	if (n == 0 && precision == 0) return (count);
 
 	while (n > 0) {
 		a[i++] = n % 8;
