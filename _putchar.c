@@ -11,20 +11,19 @@ int _putchar(char c)
 {
 	static char buffer[1024];
 	static int i;
+	int written = 0;
 
-	/* إذا أرسلنا -1 أو امتلأ البفر، نطبع كل اللي فيه */
 	if (c == -1 || i >= 1024)
 	{
-		write(1, buffer, i);
+		written = write(1, buffer, i);
 		i = 0;
 	}
 
-	/* إذا كان حرفاً عادياً، نخزنه في البفر */
 	if (c != -1)
 	{
 		buffer[i] = c;
 		i++;
+		return (1);
 	}
-
-	return (1);
+	return (written);
 }

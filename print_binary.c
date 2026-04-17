@@ -2,7 +2,7 @@
 
 /**
  * print_binary - prints the binary representation of a number
- * @l: va_list arguments from _printf
+ * @l: va_list arguments
  *
  * Return: number of characters printed
  */
