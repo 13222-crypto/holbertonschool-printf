@@ -18,7 +18,7 @@ int print_int(va_list l, char mod, int width)
 	else if (mod == 'h') n = (short int)va_arg(l, int);
 	else n = va_arg(l, int);
 
-	if (n < 0) { len++; temp = n * -1; }
+	if (n < 0) { len++; temp = (n == -2147483648) ? 2147483648UL : (unsigned long int)(-n); }
 	else temp = n;
 
 	if (temp == 0) len++;
@@ -29,8 +29,8 @@ int print_int(va_list l, char mod, int width)
 
 	while (width > len) { count += _putchar(' '); width--; }
 
-	if (n < 0) { count += _putchar('-'); num = n * -1; }
-	else num = n;
+	if (n < 0) { count += _putchar('-'); num = temp; }
+	else num = temp;
 
 	while (num / div > 9) div *= 10;
 	while (div != 0) {
