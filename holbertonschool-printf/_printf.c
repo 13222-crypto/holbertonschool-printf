@@ -19,8 +19,8 @@ int print_S(char *s)
 		{
 			count += _putchar('\\');
 			count += _putchar('x');
-			count += _putchar(hex[s[i] / 16]);
-			count += _putchar(hex[s[i] % 16]);
+			count += _putchar(hex[(unsigned char)s[i] / 16]);
+			count += _putchar(hex[(unsigned char)s[i] % 16]);
 		}
 		else count += _putchar(s[i]);
 	}
