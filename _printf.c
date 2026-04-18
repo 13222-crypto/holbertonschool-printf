@@ -94,9 +94,12 @@ int _printf(const char *format, ...)
 			plus = space = hash = zero = minus = width = 0; precision = -1; i++;
 			while (format[i] == '+' || format[i] == ' ' || format[i] == '#' || format[i] == '0' || format[i] == '-')
 			{
-				if (format[i] == '+') plus = 1; else if (format[i] == ' ') space = 1;
-				else if (format[i] == '#') hash = 1; else if (format[i] == '0') zero = 1;
-				else if (format[i] == '-') minus = 1; i++;
+				if (format[i] == '+') plus = 1;
+				else if (format[i] == ' ') space = 1;
+				else if (format[i] == '#') hash = 1;
+				else if (format[i] == '0') zero = 1;
+				else if (format[i] == '-') minus = 1;
+				i++;
 			}
 			if (format[i] == '*') { width = va_arg(args, int); i++; }
 			else { while (format[i] >= '0' && format[i] <= '9') width = width * 10 + (format[i++] - '0'); }
