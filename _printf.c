@@ -14,10 +14,8 @@ int _printf(const char *format, ...)
 		{
 			i++;
 			width = 0; prec = -1;
-			/* Width */
 			if (format[i] == '*') { width = va_arg(args, int); i++; }
 			else while (format[i] >= '0' && format[i] <= '9') width = width * 10 + (format[i++] - '0');
-			/* Precision */
 			if (format[i] == '.') {
 				i++; prec = 0;
 				if (format[i] == '*') { prec = va_arg(args, int); i++; }

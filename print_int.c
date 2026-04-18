@@ -1,13 +1,5 @@
 #include "main.h"
 
-/**
- * print_int - prints integer with precision
- * @l: va_list
- * @mod: modifier
- * @width: width
- * @prec: precision
- * Return: count
- */
 int print_int(va_list l, char mod, int width, int prec)
 {
 	long int n;
@@ -22,37 +14,23 @@ int print_int(va_list l, char mod, int width, int prec)
 	if (n < 0) { num = -n; neg = 1; }
 	else num = n;
 
-	/* حساب طول الرقم الفعلي */
 	temp = num;
 	if (num == 0 && prec != 0) len = 1;
-	else {
-		while (temp > 0) { temp /= 10; len++; }
-	}
+	else while (temp > 0) { temp /= 10; len++; }
 
-	/* إذا كانت الدقة أكبر من الطول، نحتاج أصفار */
 	if (prec > len) zeros = prec - len;
-	
-	/* حالة خاصة: الدقة 0 والرقم 0 لا يطبع شيء */
 	if (num == 0 && prec == 0) len = 0;
 
-	/* طباعة المسافات (width) */
-	while (width > (len + zeros + neg)) {
-		count += _putchar(' ');
-		width--;
-	}
-
+	while (width > (len + zeros + neg)) { count += _putchar(' '); width--; }
 	if (neg) count += _putchar('-');
-	
-	/* طباعة أصفار الدقة (precision) */
 	while (zeros-- > 0) count += _putchar('0');
 
-	/* طباعة الرقم نفسه */
 	if (len > 0) {
 		temp = num;
-		while (num / div > 9) div *= 10;
+		while (temp / div > 9) div *= 10;
 		while (div != 0) {
-			count += _putchar('0' + (num / div));
-			num %= div;
+			count += _putchar('0' + (temp / div));
+			temp %= div;
 			div /= 10;
 		}
 	}
