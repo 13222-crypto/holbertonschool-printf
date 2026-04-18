@@ -17,7 +17,6 @@ int print_base(unsigned int n, int base, int hash, int upper, int zero, int minu
 	if (precision >= 0) zero = 0;
 	p_len = (precision > len) ? precision : len;
 	if (hash && n != 0) p_len += (base == 8) ? 1 : 2;
-
 	if (!minus && !zero && width > p_len)
 		while (width > p_len++) count += _putchar(' ');
 	if (hash && n != 0)
@@ -97,14 +96,15 @@ int _printf(const char *format, ...)
 			{
 				if (format[i] == '+') plus = 1; else if (format[i] == ' ') space = 1;
 				else if (format[i] == '#') hash = 1; else if (format[i] == '0') zero = 1;
-				else if (format[i] == '-') minus = 1;
-				i++;
+				else if (format[i] == '-') minus = 1; i++;
 			}
-			while (format[i] >= '0' && format[i] <= '9') { width = width * 10 + (format[i++] - '0'); }
+			if (format[i] == '*') { width = va_arg(args, int); i++; }
+			else { while (format[i] >= '0' && format[i] <= '9') width = width * 10 + (format[i++] - '0'); }
 			if (format[i] == '.')
 			{
-				precision = 0; i++;
-				while (format[i] >= '0' && format[i] <= '9') precision = precision * 10 + (format[i++] - '0');
+				i++;
+				if (format[i] == '*') { precision = va_arg(args, int); i++; }
+				else { precision = 0; while (format[i] >= '0' && format[i] <= '9') precision = precision * 10 + (format[i++] - '0'); }
 			}
 			if (format[i] == 'd' || format[i] == 'i') count += print_number(va_arg(args, int), plus, space, zero, minus, width, precision);
 			else if (format[i] == 'u') count += print_base(va_arg(args, unsigned int), 10, 0, 0, zero, minus, width, precision);
@@ -112,7 +112,13 @@ int _printf(const char *format, ...)
 			else if (format[i] == 'x') count += print_base(va_arg(args, unsigned int), 16, hash, 0, zero, minus, width, precision);
 			else if (format[i] == 'X') count += print_base(va_arg(args, unsigned int), 16, hash, 1, zero, minus, width, precision);
 			else if (format[i] == 'c') count += _putchar(va_arg(args, int));
-			else if (format[i] == 's') { char *s = va_arg(args, char *); if (!s) s = "(null)"; while (s && *s) count += _putchar(*s++); }
+			else if (format[i] == 's')
+			{
+				char *s = va_arg(args, char *);
+				int j = 0;
+				if (!s) s = "(null)";
+				while (s[j] && (precision < 0 || j < precision)) count += _putchar(s[j++]);
+			}
 			else if (format[i] == 'r') count += print_rev(va_arg(args, char *));
 			else if (format[i] == '%') count += _putchar('%');
 			else { count += _putchar('%'); count += _putchar(format[i]); }
