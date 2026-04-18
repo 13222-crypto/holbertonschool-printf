@@ -8,6 +8,28 @@ int get_n_len(unsigned int n, int base)
 	return (len);
 }
 
+int print_rot13(char *s)
+{
+	int i, j, count = 0;
+	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+
+	if (s == NULL) s = "(null)";
+	for (i = 0; s[i]; i++)
+	{
+		for (j = 0; in[j]; j++)
+		{
+			if (s[i] == in[j])
+			{
+				count += _putchar(out[j]);
+				break;
+			}
+		}
+		if (!in[j]) count += _putchar(s[i]);
+	}
+	return (count);
+}
+
 int print_base(unsigned int n, int base, int hash, int upper, int zero, int minus, int width, int precision)
 {
 	char *set = upper ? "0123456789ABCDEF" : "0123456789abcdef";
@@ -118,11 +140,11 @@ int _printf(const char *format, ...)
 			else if (format[i] == 's')
 			{
 				char *s = va_arg(args, char *);
-				int j = 0;
-				if (!s) s = "(null)";
+				int j = 0; if (!s) s = "(null)";
 				while (s[j] && (precision < 0 || j < precision)) count += _putchar(s[j++]);
 			}
 			else if (format[i] == 'r') count += print_rev(va_arg(args, char *));
+			else if (format[i] == 'R') count += print_rot13(va_arg(args, char *));
 			else if (format[i] == '%') count += _putchar('%');
 			else { count += _putchar('%'); count += _putchar(format[i]); }
 		} else count += _putchar(format[i]);
