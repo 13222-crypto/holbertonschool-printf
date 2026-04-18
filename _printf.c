@@ -13,7 +13,6 @@ int print_rot13(char *s)
 	int i, j, count = 0;
 	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
-
 	if (s == NULL) s = "(null)";
 	for (i = 0; s[i]; i++)
 	{
@@ -35,7 +34,6 @@ int print_base(unsigned int n, int base, int hash, int upper, int zero, int minu
 	char *set = upper ? "0123456789ABCDEF" : "0123456789abcdef";
 	char buffer[50];
 	int i = 0, count = 0, len = get_n_len(n, base), p_len;
-
 	if (precision >= 0) zero = 0;
 	p_len = (precision > len) ? precision : len;
 	if (hash && n != 0) p_len += (base == 8) ? 1 : 2;
@@ -51,10 +49,9 @@ int print_base(unsigned int n, int base, int hash, int upper, int zero, int minu
 	while (precision > len++) count += _putchar('0');
 	if (!(precision == 0 && n == 0))
 	{
+		unsigned int temp = n;
 		if (n == 0) count += _putchar('0');
-		else
-		{
-			unsigned int temp = n;
+		else {
 			while (temp > 0) { buffer[i++] = set[temp % base]; temp /= base; }
 			while (--i >= 0) count += _putchar(buffer[i]);
 		}
@@ -137,8 +134,7 @@ int _printf(const char *format, ...)
 			else if (format[i] == 'x') count += print_base(va_arg(args, unsigned int), 16, hash, 0, zero, minus, width, precision);
 			else if (format[i] == 'X') count += print_base(va_arg(args, unsigned int), 16, hash, 1, zero, minus, width, precision);
 			else if (format[i] == 'c') count += _putchar(va_arg(args, int));
-			else if (format[i] == 's')
-			{
+			else if (format[i] == 's') {
 				char *s = va_arg(args, char *);
 				int j = 0; if (!s) s = "(null)";
 				while (s[j] && (precision < 0 || j < precision)) count += _putchar(s[j++]);
