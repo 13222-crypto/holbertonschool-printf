@@ -1,62 +1,77 @@
 #include "main.h"
 
 /**
- * print_char - prints a character
- * @args: va_list of arguments
- * Return: number of characters printed
+ * print_char - prints a character with width
+ * @args: va_list
+ * @f: flags
+ * Return: count
  */
-int print_char(va_list args)
+int print_char(va_list args, flags_t f)
 {
 	char c = (char)va_arg(args, int);
+	int count = 0;
 
+	if (!f.minus)
+		count += pad(f.width - 1, ' ');
 	write(1, &c, 1);
-	return (1);
+	count++;
+	if (f.minus)
+		count += pad(f.width - 1, ' ');
+	return (count);
 }
 
 /**
- * print_string - prints a string
- * @args: va_list of arguments
- * Return: number of characters printed
+ * print_string - prints a string with width/precision
+ * @args: va_list
+ * @f: flags
+ * Return: count
  */
-int print_string(va_list args)
+int print_string(va_list args, flags_t f)
 {
 	char *str = va_arg(args, char *);
-	int len = 0;
+	int len = 0, count = 0, print_len;
 
 	if (!str)
 		str = "(null)";
 	while (str[len])
-	{
-		write(1, &str[len], 1);
 		len++;
-	}
-	return (len);
+	print_len = (f.prec >= 0 && f.prec < len) ? f.prec : len;
+	if (!f.minus)
+		count += pad(f.width - print_len, ' ');
+	count += print_str_len(str, print_len);
+	if (f.minus)
+		count += pad(f.width - print_len, ' ');
+	return (count);
 }
 
 /**
- * print_percent - prints a percent sign
+ * print_percent - prints percent sign
  * @args: va_list (unused)
+ * @f: flags (unused)
  * Return: 1
  */
-int print_percent(va_list args)
+int print_percent(va_list args, flags_t f)
 {
 	(void)args;
+	(void)f;
 	write(1, "%", 1);
 	return (1);
 }
 
 /**
- * print_S - prints string with non-printable chars as \xHH
+ * print_S - prints string escaping non-printable chars
  * @args: va_list
- * Return: number of characters printed
+ * @f: flags (unused)
+ * Return: count
  */
-int print_S(va_list args)
+int print_S(va_list args, flags_t f)
 {
 	char *str = va_arg(args, char *);
 	int i = 0, count = 0;
-	char hex[5];
 	unsigned char c;
+	char hex[4];
 
+	(void)f;
 	if (!str)
 		str = "(null)";
 	while (str[i])
