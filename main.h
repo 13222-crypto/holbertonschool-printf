@@ -1,17 +1,15 @@
 #ifndef MAIN_H
 #define MAIN_H
+
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
 
 int _putchar(char c);
 int _printf(const char *format, ...);
-int print_str(va_list l, int width, int precision);
-int print_int(va_list l, char mod, int width, int precision);
-int print_unsigned(va_list l, char mod, int width, int precision);
-int print_octal(va_list l, char mod, int width, int precision);
-int print_hex(va_list l, char mod, int width, int precision);
-int print_HEX(va_list l, char mod, int width, int precision);
-int print_binary(va_list l, int width, int precision);
-int print_rot13(va_list l, int width, int precision);
+int print_number(int n, int plus, int space, int zero, int minus, int width, int precision);
+int print_number_recursion(unsigned int n1);
+int print_base(unsigned int n, int base, int hash, int upper, int zero, int minus, int width, int precision);
+int print_rev(char *s);
+
 #endif
