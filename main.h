@@ -13,5 +13,6 @@ int print_unsigned(va_list l, char mod, int width, int precision);
 int print_octal(va_list l, char mod, int width, int precision);
 int print_hex(va_list l, char mod, int width, int precision);
 int print_HEX(va_list l, char mod, int width, int precision);
+int print_rot13(va_list l, int width, int precision);
 
 #endif
