@@ -1,5 +1,13 @@
 #include "main.h"
 
+/**
+ * print_int - prints an integer with precision and returns count
+ * @l: va_list
+ * @mod: modifier
+ * @width: width
+ * @prec: precision
+ * Return: total characters printed
+ */
 int print_int(va_list l, char mod, int width, int prec)
 {
 	long int n;
@@ -16,15 +24,25 @@ int print_int(va_list l, char mod, int width, int prec)
 
 	temp = num;
 	if (num == 0 && prec != 0) len = 1;
-	else while (temp > 0) { temp /= 10; len++; }
+	else {
+		while (temp > 0) { temp /= 10; len++; }
+	}
 
 	if (prec > len) zeros = prec - len;
 	if (num == 0 && prec == 0) len = 0;
 
-	while (width > (len + zeros + neg)) { count += _putchar(' '); width--; }
+	/* طباعة المسافات للـ width واحتسابها */
+	while (width > (len + zeros + neg)) {
+		count += _putchar(' ');
+		width--;
+	}
+
 	if (neg) count += _putchar('-');
+	
+	/* طباعة أصفار الدقة واحتسابها */
 	while (zeros-- > 0) count += _putchar('0');
 
+	/* طباعة الرقم واحتساب كل حرف */
 	if (len > 0) {
 		temp = num;
 		while (temp / div > 9) div *= 10;
