@@ -9,6 +9,7 @@
  */
 int handle_specifier(char sp, va_list args, flags_t f)
 {
+	int j = 0;
 	spec_t specs[] = {
 		{'c', print_char},
 		{'s', print_string},
@@ -25,7 +26,6 @@ int handle_specifier(char sp, va_list args, flags_t f)
 		{'R', print_rot13},
 		{0, NULL}
 	};
-	int j = 0;
 
 	while (specs[j].fn)
 	{
