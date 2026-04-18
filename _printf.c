@@ -14,6 +14,7 @@ int _printf(const char *format, ...)
 		{
 			i++;
 			width = 0; prec = -1;
+			while (format[i] == ' ') i++; /* تجاهل المسافات بعد الـ % */
 			if (format[i] == '*') { width = va_arg(args, int); i++; }
 			else while (format[i] >= '0' && format[i] <= '9') width = width * 10 + (format[i++] - '0');
 			if (format[i] == '.') {
@@ -28,6 +29,7 @@ int _printf(const char *format, ...)
 			else if (format[i] == 'o') count += print_octal(args, mod, width, prec);
 			else if (format[i] == 'x') count += print_hex(args, mod, width, prec);
 			else if (format[i] == 'X') count += print_HEX(args, mod, width, prec);
+			else if (format[i] == 'b') count += print_binary(args, width, prec);
 			else if (format[i] == 'R') count += print_rot13(args, width, prec);
 			else if (format[i] == 'c') {
 				int val = va_arg(args, int);
