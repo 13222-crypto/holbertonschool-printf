@@ -3,7 +3,7 @@
 /**
  * print_hex_helper - recursive helper for hex printing
  * @n: number
- * @digits: digit string (lower or upper)
+ * @digits: digit string
  * Return: count
  */
 static int print_hex_helper(unsigned int n, char *digits)
@@ -20,7 +20,7 @@ static int print_hex_helper(unsigned int n, char *digits)
 }
 
 /**
- * print_hex_lower - prints hex in lowercase
+ * print_hex_lower - prints hex lowercase
  * @args: va_list
  * Return: count
  */
@@ -37,7 +37,7 @@ int print_hex_lower(va_list args)
 }
 
 /**
- * print_hex_upper - prints hex in uppercase
+ * print_hex_upper - prints hex uppercase
  * @args: va_list
  * Return: count
  */

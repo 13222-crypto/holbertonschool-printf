@@ -20,6 +20,10 @@ int _printf(const char *format, ...)
 		{'x', print_hex_lower},
 		{'X', print_hex_upper},
 		{'p', print_pointer},
+		{'b', print_binary},
+		{'S', print_S},
+		{'r', print_reverse},
+		{'R', print_rot13},
 		{0, NULL}
 	};
 

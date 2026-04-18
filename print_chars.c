@@ -44,3 +44,39 @@ int print_percent(va_list args)
 	write(1, "%", 1);
 	return (1);
 }
+
+/**
+ * print_S - prints string with non-printable chars as \xHH
+ * @args: va_list
+ * Return: number of characters printed
+ */
+int print_S(va_list args)
+{
+	char *str = va_arg(args, char *);
+	int i = 0, count = 0;
+	char hex[5];
+	unsigned char c;
+
+	if (!str)
+		str = "(null)";
+	while (str[i])
+	{
+		c = (unsigned char)str[i];
+		if (c < 32 || c >= 127)
+		{
+			hex[0] = '\\';
+			hex[1] = 'x';
+			hex[2] = "0123456789ABCDEF"[c / 16];
+			hex[3] = "0123456789ABCDEF"[c % 16];
+			write(1, hex, 4);
+			count += 4;
+		}
+		else
+		{
+			write(1, &str[i], 1);
+			count++;
+		}
+		i++;
+	}
+	return (count);
+}
