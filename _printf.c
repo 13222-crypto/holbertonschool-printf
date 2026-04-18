@@ -1,114 +1,39 @@
 #include "main.h"
-
-/**
- * parse_flags - parses flags/width/prec/mod from format
- * @fmt: format string after '%'
- * @i: index pointer
- * @args: pointer to va_list for * width/prec
- * Return: flags_t struct
- */
-static flags_t parse_flags(const char *fmt, int *i, va_list *args)
-{
-	flags_t f = {0, 0, 0, 0, 0, 0, -1, 0};
-
-	while (fmt[*i] == '-' || fmt[*i] == '0' || fmt[*i] == '+'
-		|| fmt[*i] == ' ' || fmt[*i] == '#')
-	{
-		if (fmt[*i] == '-') f.minus = 1;
-		else if (fmt[*i] == '0') f.zero = 1;
-		else if (fmt[*i] == '+') f.plus = 1;
-		else if (fmt[*i] == ' ') f.space = 1;
-		else if (fmt[*i] == '#') f.hash = 1;
-		(*i)++;
-	}
-	if (fmt[*i] == '*')
-	{
-		f.width = va_arg(*args, int);
-		(*i)++;
-	}
-	else
-	{
-		while (fmt[*i] >= '0' && fmt[*i] <= '9')
-		{
-			f.width = f.width * 10 + (fmt[*i] - '0');
-			(*i)++;
-		}
-	}
-	if (fmt[*i] == '.')
-	{
-		(*i)++;
-		f.prec = 0;
-		if (fmt[*i] == '*')
-		{
-			f.prec = va_arg(*args, int);
-			(*i)++;
-		}
-		else
-		{
-			while (fmt[*i] >= '0' && fmt[*i] <= '9')
-			{
-				f.prec = f.prec * 10 + (fmt[*i] - '0');
-				(*i)++;
-			}
-		}
-	}
-	if (fmt[*i] == 'l' || fmt[*i] == 'h')
-	{
-		f.mod = fmt[*i];
-		(*i)++;
-	}
-	return (f);
-}
-
-/**
- * _printf - produces output according to a format
- * @format: format string
- * Return: number of characters printed
- */
 int _printf(const char *format, ...)
 {
-	va_list args;
-	int i = 0, count = 0, ret;
-
-	if (!format)
-		return (-1);
-	va_start(args, format);
-	while (format[i])
-	{
-		if (format[i] == '%')
-		{
-			i++;
-			if (!format[i])
-				return (-1);
-			if (format[i] == '%')
-			{
-				write(1, "%", 1);
-				count++;
-				i++;
-				continue;
-			}
-			else
-			{
-				flags_t f = parse_flags(format, &i, &args);
-
-				ret = handle_specifier(format[i], args, f);
-				if (ret == -1)
-				{
-					write(1, "%", 1);
-					write(1, &format[i], 1);
-					count += 2;
-				}
-				else
-					count += ret;
-			}
-		}
-		else
-		{
-			write(1, &format[i], 1);
-			count++;
-		}
-		i++;
-	}
-	va_end(args);
-	return (count);
+    va_list args;
+    int i = 0, count = 0, width, prec;
+    char mod;
+    if (!format || (format[0] == '%' && !format[1])) return (-1);
+    va_start(args, format);
+    for (i = 0; format[i]; i++) {
+        if (format[i] == '%') {
+            i++; width = 0; prec = -1; mod = 0;
+            while (format[i] == ' ') i++;
+            if (format[i] == '*') { width = va_arg(args, int); i++; }
+            else while (format[i] >= '0' && format[i] <= '9') width = width * 10 + (format[i++] - '0');
+            if (format[i] == '.') {
+                i++; prec = 0;
+                if (format[i] == '*') { prec = va_arg(args, int); i++; }
+                else while (format[i] >= '0' && format[i] <= '9') prec = prec * 10 + (format[i++] - '0');
+            }
+            if (format[i] == 'l' || format[i] == 'h') mod = format[i++];
+            if (format[i] == 'd' || format[i] == 'i') count += print_int(args, mod, width, prec);
+            else if (format[i] == 's') count += print_str(args, width, prec);
+            else if (format[i] == 'u') count += print_unsigned(args, mod, width, prec);
+            else if (format[i] == 'o') count += print_octal(args, mod, width, prec);
+            else if (format[i] == 'x') count += print_hex(args, mod, width, prec);
+            else if (format[i] == 'X') count += print_HEX(args, mod, width, prec);
+            else if (format[i] == 'b') count += print_binary(args, width, prec);
+            else if (format[i] == 'R') count += print_rot13(args, width, prec);
+            else if (format[i] == 'c') {
+                int c = va_arg(args, int);
+                while (width-- > 1) count += _putchar(' ');
+                count += _putchar(c);
+            } else if (format[i] == '%') count += _putchar('%');
+            else { count += _putchar('%'); if (mod) count += _putchar(mod); count += _putchar(format[i]); }
+        } else count += _putchar(format[i]);
+    }
+    va_end(args);
+    return (count);
 }
