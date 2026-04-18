@@ -1,5 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
+
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -14,4 +15,5 @@ int print_hex(va_list l, char mod, int width, int precision);
 int print_HEX(va_list l, char mod, int width, int precision);
 int print_binary(va_list l, int width, int precision);
 int print_rot13(va_list l, int width, int precision);
+
 #endif
